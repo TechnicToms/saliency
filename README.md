@@ -6,7 +6,7 @@ A github repository containing various algorithms that generate saliency maps fr
 
 ## Itti’s Method
 
-The class “Ittis method” is the implementation of the paper: **A Model of Saliency-Based Visual Attention for Rapid Scene Analysis** (Short Paper: [1]).
+The class “Ittis method” is the implementation of the paper: **A Model of Saliency-Based Visual Attention for Rapid Scene Analysis** (See short Paper: [[1](#references)]).
 Here, the class implements the adjacent image in the form of summarized functions.
 
 ![image](images/ittis_method.png)
@@ -41,141 +41,24 @@ Calculates the center-surrounded difference ($\ominus$) for the given pyramid im
 
 For a given pyramid image $I(\sigma)$ it performs the following equation for the two scales `c` and `s`:
 
-I(s,c) = | I_c(c) \\ominus I_s(s) |
-
-
-* **Parameters**
-
-    
-    * **PyramidList_c** (*list*) – list of pyramid images for c scales [from the previous function `linear_filtering(...)`]
-
-
-    * **PyramidList_s** (*list*) – list of pyramid images for s scales [from the previous function `linear_filtering(...)`]
-
-
-
-* **Raises**
-
-    
-    * **ValueError** – If length of input list PyramidList_c isn’t long enough
-
-
-    * **ValueError** – If length of input list PyramidList_s isn’t long enough
-
-
-
-* **Returns**
-
-    csd maps
-
-
-
-* **Return type**
-
-    list
-
+$I(s,c) = | I_c(c) \ominus I_s(s) |$
 
 
 #### colors(img: Tensor)
 Generates the color features for the given rgb image.
 
 
-* **Parameters**
-
-    **img** (*torch.Tensor*) – rgb input image
-
-
-
-* **Returns**
-
-    (R, G, B, Y) features
-
-
-
-* **Return type**
-
-    tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]
-
-
-
 #### intensity(img: Tensor)
 Creates an intensity map from the given rgb image.
-
-
-* **Parameters**
-
-    **img** (*torch.Tensor*) – rgb input image
-
-
-
-* **Returns**
-
-    intensity map
-
-
-
-* **Return type**
-
-    torch.Tensor
-
-
 
 #### linear_combination(I_dash: Tensor, C_dash: Tensor, O_dash: Tensor)
 Calculates the saliency map S by the following formula:
 
-S = \\frac{1}{3}\\left(\\mathcal{N}(\\bar{I}) + \\mathcal{N}(\\bar{C}) + \\mathcal{N}(\\bar{O}) \\right)
-
-
-* **Parameters**
-
-    
-    * **I_dash** (*torch.Tensor*) – across-scale combinations of the intensity maps
-
-
-    * **C_dash** (*torch.Tensor*) – across-scale combinations of the color maps
-
-
-    * **O_dash** (*torch.Tensor*) – across-scale combinations of the orientation maps
-
-
-
-* **Raises**
-
-    **TypeError** – If one of the inputs in not of type torch.Tensor
-
-
-
-* **Returns**
-
-    saliency map S
-
-
-
-* **Return type**
-
-    torch.Tensor
-
+$S = \frac{1}{3}\left( \mathcal{N}(\bar{I}) + \mathcal{N}(\bar{C}) + \mathcal{N}(\bar{O}) \right)$
 
 
 #### linear_filtering(img: Tensor)
 Performs the feature extraction and the follow up pyramid image generation.
-
-
-* **Parameters**
-
-    **img** (*torch.Tensor*) – input rgb image
-
-
-
-* **Returns**
-
-    Results of features
-
-
-
-* **Return type**
-
-    tuple
 
 
 
@@ -183,34 +66,7 @@ Performs the feature extraction and the follow up pyramid image generation.
 Normalizes the input map by the factor $(M-\mu)^2$,
 where $M$ is the maximum of the map and $\mu$ the mean of the map.
 
-\\mathcal{N}(\\mathbf{I}(x, y)) = (M-\\mu)^2 \\cdot \\mathbf{I}(x, y)
-
-
-* **Parameters**
-
-    **input_map** (*torch.Tensor*) – input map
-
-
-
-* **Raises**
-
-    
-    * **TypeError** – If input is not of type torch.Tensor
-
-
-    * **USerWarning** – If input map has more than one color channel
-
-
-
-* **Returns**
-
-    normalized map
-
-
-
-* **Return type**
-
-    torch.Tensor
+$\mathcal{N}(\mathbf{I}(x, y)) = (M-\mu)^2 \cdot \mathbf{I}(x, y)$
 
 
 
@@ -218,23 +74,6 @@ where $M$ is the maximum of the map and $\mu$ the mean of the map.
 Generates Gabor pyramids for the given input image.
 For that purpose the image will be convertet using the `intensity` function and
 then applied to the GaborPyramids class, which yield the gabor pyramids.
-
-
-* **Parameters**
-
-    **img** (*torch.Tensor*) – rgb input image
-
-
-
-* **Returns**
-
-    a list of orientations of pyramids
-
-
-
-* **Return type**
-
-    list
 
 
 
@@ -246,28 +85,8 @@ which are followed by the across-scale combination and in the end the linear com
 
 Everything that this function calculates can be also done manually, if the corresponding subfunctions of this class are called in the right order.
 
-### Example
+-----
 
-```python
->>> import torchvision
->>> img = torchvision.io.read_image("data/cat.png")[0:3, ...] / 255.0
->>> ef = IttisMethod()
->>> sm = ef.saliency_map(img)
-```
+# References
 
-
-* **Parameters**
-
-    **img** (*torch.Tensor*) – input rgb image
-
-
-
-* **Returns**
-
-    saliency map
-
-
-
-* **Return type**
-
-    torch.Tensor
+> [1]: L. Itti, C. Koch and E. Niebur, "A model of saliency-based visual attention for rapid scene analysis," in IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 20, no. 11, pp. 1254-1259, Nov. 1998, doi: 10.1109/34.730558.
