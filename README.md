@@ -1,10 +1,24 @@
 # saliency
 A github repository containing various algorithms that generate saliency maps from images (Itti's Method ...). 
 
+## Table of Contents
+1. [General](#General)
+2. [Documentation](#documentation)
+    1. [Ittis-Method](#ittis-method)
+3. [References](#references)
 
 ---
 
-## Itti’s Method
+## General
+test
+
+----
+
+# Documentation
+test
+
+
+### Itti’s Method
 
 The class “Ittis method” is the implementation of the paper: **A Model of Saliency-Based Visual Attention for Rapid Scene Analysis** (See short Paper: [[1](#references)]).
 Here, the class implements the adjacent image in the form of summarized functions.
@@ -31,59 +45,53 @@ TODO
 **NOTE**: Because of the Pyramid images the in input image will be resized. As a limitation this class only takes images, that are larger than 256 px in height and width.
 
 
-### _class_  IttisMethod(c: list = [2, 3, 4], delta: list = [3, 4])
+#### _class_  IttisMethod(c: list = [2, 3, 4], delta: list = [3, 4])
 A class for generating a saliency map using Itti’s method from the Paper:
 `A Model of Saliency-Based Visual Attention for Rapid Scene Analysis`.
 
+<dl>
+  <dt>center_surrounded_differences(PyramidList_c: list, PyramidList_s)</dt>
+  <dd>
+  Calculates the center-surrounded difference for the given pyramid images. For a given pyramid image I(sigma) it performs the following equation for the two scales c and s: 
+  
+  $I(s,c) = | I_c(c) \ominus I_s(s) |$
+  </dd>
 
-#### center_surrounded_differences(PyramidList_c: list, PyramidList_s)
-Calculates the center-surrounded difference ($\ominus$) for the given pyramid images.
+  <dt>colors(img: Tensor)</dt>
+  <dd>Generates the color features for the given rgb image.</dd>
 
-For a given pyramid image $I(\sigma)$ it performs the following equation for the two scales `c` and `s`:
+  <dt>intensity(img: Tensor)</dt>
+  <dd>Creates an intensity map from the given rgb image.</dd>
 
-$I(s,c) = | I_c(c) \ominus I_s(s) |$
+  <dt>linear_combination(I_dash: Tensor, C_dash: Tensor, O_dash: Tensor)</dt>
+  <dd>Calculates the saliency map S by the following formula:
+  
+  $S = \frac{1}{3}\left( \mathcal{N}(\bar{I}) + \mathcal{N}(\bar{C}) + \mathcal{N}(\bar{O}) \right)$
+  </dd>
 
+  <dt>linear_filtering(img: Tensor)</dt>
+  <dd>Performs the feature extraction and the follow up pyramid image generation.</dd>
 
-#### colors(img: Tensor)
-Generates the color features for the given rgb image.
-
-
-#### intensity(img: Tensor)
-Creates an intensity map from the given rgb image.
-
-#### linear_combination(I_dash: Tensor, C_dash: Tensor, O_dash: Tensor)
-Calculates the saliency map S by the following formula:
-
-$S = \frac{1}{3}\left( \mathcal{N}(\bar{I}) + \mathcal{N}(\bar{C}) + \mathcal{N}(\bar{O}) \right)$
-
-
-#### linear_filtering(img: Tensor)
-Performs the feature extraction and the follow up pyramid image generation.
-
-
-
-#### normalize_map(input_map: Tensor)
-Normalizes the input map by the factor $(M-\mu)^2$,
-where $M$ is the maximum of the map and $\mu$ the mean of the map.
+  <dt>normalize_map(input_map: Tensor)</dt>
+  <dd>Normalizes the input map by the factor $(M-\mu)^2$, where $M$ is the maximum of the map and $\mu$ the mean of the map.
 
 $\mathcal{N}(\mathbf{I}(x, y)) = (M-\mu)^2 \cdot \mathbf{I}(x, y)$
+  </dd>
 
-
-
-#### orientations(img: Tensor)
-Generates Gabor pyramids for the given input image.
+  <dt>orientations(img: Tensor)</dt>
+  <dd>Generates Gabor pyramids for the given input image.
 For that purpose the image will be convertet using the `intensity` function and
-then applied to the GaborPyramids class, which yield the gabor pyramids.
+then applied to the GaborPyramids class, which yield the gabor pyramids. </dd>
 
-
-
-#### saliency_map(img: Tensor)
-Calculates the Saliency map using the Itti’s method.
+  <dt>saliency_map(img: Tensor)</dt>
+  <dd>Calculates the Saliency map using the Itti’s method.
 
 For that purpose the subfunctions of this class will be used, to first calculate the features, then the center-surround differences,
 which are followed by the across-scale combination and in the end the linear combination of the three maps.
 
-Everything that this function calculates can be also done manually, if the corresponding subfunctions of this class are called in the right order.
+Everything that this function calculates can be also done manually, if the corresponding subfunctions of this class are called in the right order.</dd>
+
+</dl>
 
 -----
 
